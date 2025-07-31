@@ -20,7 +20,7 @@ fun RecordGradesScreen(){
 
         }
         Button(onClick = {}, modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-            Text("Add Scores for Each subject")
+            Text("Add Scores ")
         }
     }
 }
