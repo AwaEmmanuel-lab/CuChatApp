@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "541352619030",
+    "project_id": "cu-chatapp-a7a2e",
+    "storage_bucket": "cu-chatapp-a7a2e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:541352619030:android:180688f130e762ea941937",
+        "android_client_info": {
+          "package_name": "com.awatech.cuchatapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2dBIsbPATaeN7c5ji_CXh9k3R-jp3qzw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
