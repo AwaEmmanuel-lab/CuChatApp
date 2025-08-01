@@ -8,10 +8,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.awatech.cuchatapp.Repository.UserAuthRepository
 import com.awatech.cuchatapp.data.Injection
 import com.awatech.cuchatapp.data.ResultState
 import com.awatech.cuchatapp.data.User
+import com.awatech.cuchatapp.data.recordGrades
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -96,6 +98,18 @@ class UserViewModel: ViewModel() {
 
     }
 
+    private var _getAllGrades = MutableLiveData<List<recordGrades>>()
+    var getAllGrades: LiveData<List<recordGrades>> = _getAllGrades
 
-
+    fun getAllGrades(){
+        viewModelScope.launch {
+            userAuthRepository.getAllRecords()
+                .collect { recordGrades -> _getAllGrades.value = recordGrades }
+        }
+    fun setGrades(nameOfcourse: String, grade: String){
+        viewModelScope.launch {
+            val recordGrades = recordGrades(nameOfcourse,grade, "")
+            userAuthRepository.sendGrades(recordGrades)
+        }
+    }
 }
