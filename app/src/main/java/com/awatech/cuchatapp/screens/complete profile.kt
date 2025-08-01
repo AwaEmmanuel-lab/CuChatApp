@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material3.Button
@@ -53,6 +55,8 @@ fun CompleteProfileScreen(email: String,
     val registerState by userViewModel.reagisterUserState.observeAsState()
     val context = LocalContext.current
 
+    val scrollState = rememberScrollState()
+
     var name by remember { mutableStateOf("") }
     var matNo by remember { mutableStateOf("") }
     var course by remember { mutableStateOf("") }
@@ -79,7 +83,7 @@ fun CompleteProfileScreen(email: String,
     Column(modifier = Modifier
         .padding(8.dp)
         .fillMaxSize()
-        .background(color = Color.White),
+        .background(color = Color.White).verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){

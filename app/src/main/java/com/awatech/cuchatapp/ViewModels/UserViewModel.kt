@@ -98,18 +98,26 @@ class UserViewModel: ViewModel() {
 
     }
 
-    private var _getAllGrades = MutableLiveData<List<recordGrades>>()
-    var getAllGrades: LiveData<List<recordGrades>> = _getAllGrades
+    private var _getAllGradesList = MutableLiveData<List<recordGrades>>()
+    var getAllGradesList: LiveData<List<recordGrades>> = _getAllGradesList
 
-    fun getAllGrades(){
+    fun getAllGrades() {
         viewModelScope.launch {
             userAuthRepository.getAllRecords()
-                .collect { recordGrades -> _getAllGrades.value = recordGrades }
+                .collect { recordGrades -> _getAllGradesList.value = recordGrades }
         }
+    }
     fun setGrades(nameOfcourse: String, grade: String){
         viewModelScope.launch {
             val recordGrades = recordGrades(nameOfcourse,grade, "")
             userAuthRepository.sendGrades(recordGrades)
+        }
+    }
+    private var _recordDeletState = MutableLiveData<ResultState<Boolean>>()
+    var recordDeleteState: LiveData<ResultState<Boolean>> = _recordDeletState
+    fun deleteGrade(id: String){
+        viewModelScope.launch {
+            userAuthRepository.deleteRecord(id)
         }
     }
 }

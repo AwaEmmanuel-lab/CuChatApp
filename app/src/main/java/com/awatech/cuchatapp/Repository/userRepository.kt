@@ -44,7 +44,7 @@ class UserAuthRepository(val firestore: FirebaseFirestore, val auth: FirebaseAut
     fun getAllUsers(): Flow<List<User>> = callbackFlow {
         val subscription =  firestore.collection("Users").addSnapshotListener{ snapshot, e ->
             snapshot?.let{
-               trySend(it.documents.map { doc -> doc.toObject(User:: class.java)!!.copy() }).isSuccess
+               trySend(it.documents.mapNotNull { doc -> doc.toObject(User:: class.java)?.copy() }).isSuccess
             }
         }
         awaitClose { subscription.remove() }
@@ -71,13 +71,24 @@ class UserAuthRepository(val firestore: FirebaseFirestore, val auth: FirebaseAut
             ResultState.Error(e)
         }
 
-    suspend fun getAllRecords():Flow<List<recordGrades>> = callbackFlow {
-        firestore.collection("Records").addSnapshotListener{
+    fun getAllRecords():Flow<List<recordGrades>> = callbackFlow {
+        val subscription = firestore.collection("Records").addSnapshotListener{
             snapshot, _ ->
             snapshot?.let{
-                it.documents.map { doc -> doc.toObject(recordGrades::class.java)!!.copy(id = doc.id) }
+                trySend(
+                    it.documents.mapNotNull { doc -> doc.toObject(recordGrades::class.java)?.copy(id = doc.id) }
+                ).isSuccess
             }
         }
+        awaitClose { subscription.remove() }
     }
+
+    suspend fun deleteRecord(id: String):ResultState<Boolean> =
+        try{
+            firestore.collection("Records").document(id).delete().await()
+            ResultState.Success(true)
+        }catch (e: Exception){
+            ResultState.Error(e)
+        }
 
 }

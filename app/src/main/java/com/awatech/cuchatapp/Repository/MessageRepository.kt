@@ -26,7 +26,7 @@ class MessageRepository(val firestore: FirebaseFirestore) {
             .addSnapshotListener{ snapshot, e ->
                 snapshot?.let {
                     trySend(
-                        it.documents.map { doc -> doc.toObject(Message::class.java)!!.copy(textId = doc.id)}
+                        it.documents.mapNotNull { doc -> doc.toObject(Message::class.java)?.copy(textId = doc.id)}
                     ).isSuccess
                 }
         }
@@ -42,18 +42,19 @@ class MessageRepository(val firestore: FirebaseFirestore) {
         }
 
 
-    suspend fun getMessages2(id: String): Flow<List<Message>> = callbackFlow {
+    fun getMessages2(id: String): Flow<List<Message>> = callbackFlow {
         val subscription = firestore.collection("Messages2").document(id).collection("message")
             .addSnapshotListener{snapshot, _ ->
                 snapshot?.let{
                     trySend(
-                        it.documents.map {
+                        it.documents.mapNotNull {
                                 doc ->
-                            doc.toObject(Message::class.java)!!.copy(textId = doc.id)
+                            doc.toObject(Message::class.java)?.copy(textId = doc.id)
                         }
                     ).isSuccess
                 }
             }
+        awaitClose { subscription.remove() }
     }
 
     suspend fun sendmessages3(message: Message, id: String): ResultState<Boolean> =
@@ -69,12 +70,13 @@ class MessageRepository(val firestore: FirebaseFirestore) {
             .addSnapshotListener{snapshot, _ ->
                 snapshot?.let{
                     trySend(
-                        it.documents.map {
+                        it.documents.mapNotNull {
                                 doc ->
-                            doc.toObject(Message::class.java)!!.copy(textId = doc.id)
+                            doc.toObject(Message::class.java)?.copy(textId = doc.id)
                         }
                     ).isSuccess
                 }
             }
+        awaitClose { subscription.remove() }
     }
 }

@@ -11,5 +11,6 @@ sealed class Screens(val route: String) {
         object chatScreen: DrawerScreen("chatScreenCourse")
         object chatScreenLevel: DrawerScreen("chatScreenLevel")
         object chatScreenAll: DrawerScreen("chatScreenAll")
+        object recordAnalysisScreen:DrawerScreen("recordAnalysisScreen")
     }
 }
