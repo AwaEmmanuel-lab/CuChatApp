@@ -53,8 +53,7 @@ fun GroupChatScreenForAll(navController: NavHostController, messageViewModel: Me
     ){
         var message by remember { mutableStateOf("") }
         Column (
-            Modifier.fillMaxSize()
-                .padding(8.dp),
+            Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
             LazyColumn (modifier = Modifier.fillMaxWidth()

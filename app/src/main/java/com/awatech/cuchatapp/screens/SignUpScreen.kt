@@ -50,28 +50,28 @@ fun SignUpScreen(navController: NavHostController, userViewModel: UserViewModel)
     val scrollState = rememberScrollState()
 
 
-    Column (modifier = Modifier.padding(8.dp)
+    Column (modifier = Modifier
         .fillMaxSize(). background(color = Color.White).verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.Center
     ){
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start){
             Image(
-                painter = painterResource(id = R.drawable.cu_logo), contentDescription = "cu_logo",modifier = Modifier.aspectRatio(1f)
+                painter = painterResource(id = R.drawable.cu_logo), contentDescription = "cu_logo",modifier = Modifier.aspectRatio(1f).padding(8.dp)
             )
         }
         //Spacer(modifier = Modifier.height(16.dp))
         Text("Sign up", fontSize = MaterialTheme.typography.displayMedium.fontSize,)
         //Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
             value = email,
             onValueChange = { email = it},
             label = { Text("Email") }
         )
         //Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
             value = password,
             onValueChange = { password = it},
             label = { Text("Password") }
@@ -90,16 +90,17 @@ fun SignUpScreen(navController: NavHostController, userViewModel: UserViewModel)
             }
         },
             modifier = Modifier.background(color = Color.Black, shape = RoundedCornerShape(15))
-                .fillMaxWidth().padding(16.dp),
+                ,
             shape = RoundedCornerShape(15),
             colors = ButtonColors(Color.Black, Color.White,Color.Transparent, Color.Transparent)) {
             Text(text = "Sign Up", color = Color.White)
         }
-       // Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         Text("Already have an account? Log in",
             modifier = Modifier.clickable {
                 navController.navigate(Screens.DrawerScreen.LoginScreen.route)
             })
+        Spacer(modifier = Modifier.height(8.dp))
     }
 
 }

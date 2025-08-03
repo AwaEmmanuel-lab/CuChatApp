@@ -44,5 +44,9 @@ fun App(navController: NavHostController, userViewModel: UserViewModel, messageV
         composable(Screens.DrawerScreen.chatScreenAll.route){
             GroupChatScreenForAll(navController,messageViewModel,userViewModel)
         }
+        composable(Screens.DrawerScreen.recordAnalysisScreen.route){
+            RecordGradesScreen( userViewModel)
+        }
+
     }
 }
