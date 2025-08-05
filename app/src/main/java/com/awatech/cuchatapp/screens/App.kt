@@ -4,7 +4,6 @@ import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,8 +31,8 @@ fun App(navController: NavHostController, userViewModel: UserViewModel, messageV
             var password = Uri.decode(encodedpassword)
             CompleteProfileScreen(email = email, password = password, navController = navController, userViewModel, messageViewModel)
         }
-        composable(Screens.DrawerScreen.dashbord.route){
-            DashBoardScreen(navController, userViewModel)
+        composable(Screens.DrawerScreen.dashboard.route){
+            DashBoardScreen2(navController, userViewModel, messageViewModel)
         }
         composable(Screens.DrawerScreen.chatScreen.route){
             GroupChatScreen(navController, messageViewModel)

@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.awatech.cuchatapp.ViewModels.MessageViewModel
@@ -39,20 +40,20 @@ import com.awatech.cuchatapp.data.Message
 import com.awatech.cuchatapp.ui.theme.CuChaappTheme
 
 @Composable
-fun GroupChatScreen(navController: NavHostController, messageViewModel: MessageViewModel){
+fun GroupChatScreen(navController: NavController, messageViewModel: MessageViewModel){
 
     val messages by messageViewModel.getMessage.observeAsState(emptyList())
     val currentUser by messageViewModel.curreUserState.observeAsState()
 
 
     LaunchedEffect (Unit){
-        messageViewModel.getMessage(messageViewModel.roomId.value)
+        messageViewModel.getMessage()
         messageViewModel.getcurrentUser()
     }
 
    Scaffold (
        topBar = {
-           TopAppBar(navController, messageViewModel.curreUserState.value!!.course)
+           TopAppBar(navController, messageViewModel.curreUserState.value?.course ?: "Group")
        }
    ){
        var message by remember {mutableStateOf("")}
@@ -62,16 +63,16 @@ fun GroupChatScreen(navController: NavHostController, messageViewModel: MessageV
            LazyColumn (modifier = Modifier.fillMaxWidth()
                .weight(1f)
            ){
-               items(messageViewModel.getMessage.value){
+               items(messages){
                    message ->
-                   var msg = message.copy(isCurrentUser = messageViewModel.curreUserState.value!!.matNo == message.matNo)
+                   var msg = message.copy(isCurrentUser = messageViewModel.curreUserState.value?.matNo == message.matNo)
                    MessageItem(msg, messageViewModel)
                }
            }
            Row (modifier = Modifier.fillMaxWidth().padding(it), horizontalArrangement = Arrangement.SpaceEvenly){
                TextField(value = message, onValueChange = { message = it}, modifier = Modifier.weight(1f) )
                IconButton(onClick = {
-                   messageViewModel.sendMessage(message, messageViewModel.roomId.value)
+                   messageViewModel.sendMessage(message)
                }) {
                    Icon(imageVector = Icons.Default.Send, contentDescription = null)
                }
@@ -95,17 +96,16 @@ fun MessageItem(message: Message, messageViewModel: MessageViewModel){
             Alignment.Start
         }
     ) {
-        Box (modifier = Modifier.background(color = if(message.isCurrentUser){Color.Black}else{Color.DarkGray})){
-            Text(message.text, color = Color.White)
-            Text(messageViewModel.convertTimeStamp(message.timestamp), color = Color.White)
+
+            Text(message.text, color = Color.Black)
+            Text(messageViewModel.convertTimeStamp(message.timestamp), color = Color.Black)
             messageViewModel.curreUserState.value?.name?.let { Text("From" + it) }
-        }
     }
 }
 
 
 @Composable
-fun TopAppBar(navController: NavHostController, course: String){
+fun TopAppBar(navController: NavController, course: String){
 
     androidx.compose.material.TopAppBar(
         title = {

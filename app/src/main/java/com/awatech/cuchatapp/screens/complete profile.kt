@@ -1,7 +1,6 @@
 package com.awatech.cuchatapp.screens
 
 
-import android.content.Context
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -35,8 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.toLowerCase
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.awatech.cuchatapp.R
@@ -70,7 +67,7 @@ fun CompleteProfileScreen(email: String,
         when(registerState){
             is ResultState.Success -> {
                 Toast.makeText(context, "Registered Successfully", Toast.LENGTH_LONG).show()
-                navController.navigate(Screens.DrawerScreen.dashbord.route){
+                navController.navigate(Screens.DrawerScreen.dashboard.route){
                     popUpTo(Screens.DrawerScreen.CompleteProfileScreen.route){inclusive = true}
                 }
             }
@@ -139,6 +136,7 @@ fun CompleteProfileScreen(email: String,
                     Toast.makeText(context, "You are not eligible to use this app", Toast.LENGTH_LONG).show()
                 }else{
                     messageViewModel.toGetRoomId(matNo, level)
+                    userViewModel.getMatNo(matNo)
                     messageViewModel.getRoomIdForLevel(level)
                     userViewModel.registerUser(name, email.toLowerCase(Locale.ROOT), password, matNo.toUpperCase(Locale.ROOT), course.toUpperCase(Locale.ROOT), yearOfGraduation, level)
                 }

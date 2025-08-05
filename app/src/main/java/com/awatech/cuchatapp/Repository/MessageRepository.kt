@@ -3,6 +3,7 @@ package com.awatech.cuchatapp.Repository
 
 import com.awatech.cuchatapp.data.ResultState
 import com.awatech.cuchatapp.data.Message
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -72,7 +73,7 @@ class MessageRepository(val firestore: FirebaseFirestore) {
                     trySend(
                         it.documents.mapNotNull {
                                 doc ->
-                            doc.toObject(Message::class.java)?.copy(textId = doc.id)
+                            doc.toObject(Message::class.java)?.copy(textId = doc.id, timestamp = doc.getTimestamp("timestamp")?: Timestamp.now())
                         }
                     ).isSuccess
                 }

@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="DeepBlue">#030321</color>
     <color name = "lightCream">#fffbf0</color>>
+    <color name="lightGrren">#aaf0bd</color>
+    <color name="pinkishred">#faacac</color>
+    <color name="coffeColor">#6F4E37</color>
 </resources>

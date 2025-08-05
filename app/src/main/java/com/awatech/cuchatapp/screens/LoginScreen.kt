@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.MaterialTheme
@@ -36,7 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.awatech.cuchatapp.R
 import com.awatech.cuchatapp.ViewModels.UserViewModel
 import com.awatech.cuchatapp.data.ResultState
@@ -45,9 +44,9 @@ import com.awatech.cuchatapp.ui.theme.CuChaappTheme
 
 
 @Composable
-fun Login(userViewModel: UserViewModel, navController: NavHostController){
+fun Login(userViewModel: UserViewModel, navController: NavController){
 
-    val loginuserstate by userViewModel.loginUserState.observeAsState()
+    val loginuserstate = userViewModel.loginUserState.observeAsState().value
     val context = LocalContext.current
 
     val scrollState = rememberScrollState()
@@ -55,8 +54,8 @@ fun Login(userViewModel: UserViewModel, navController: NavHostController){
 
     LaunchedEffect (loginuserstate){
         when(loginuserstate){
-            is ResultState.Success -> {Toast.makeText( context,"Login Successful", Toast.LENGTH_SHORT).show()
-                navController.navigate(Screens.DrawerScreen.dashbord.route){
+            is ResultState.Success -> {Toast.makeText( context,"Login Successful", Toast.LENGTH_LONG).show()
+               navController.navigate(Screens.DrawerScreen.dashboard.route){
                     popUpTo(Screens.DrawerScreen.LoginScreen.route){inclusive = true}
                 }
             }
@@ -70,6 +69,7 @@ fun Login(userViewModel: UserViewModel, navController: NavHostController){
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var matNo by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -85,7 +85,6 @@ fun Login(userViewModel: UserViewModel, navController: NavHostController){
                 painter = painterResource(id = R.drawable.cu_logo), contentDescription = "cu_logo", modifier = Modifier.aspectRatio(2f)
             )
         }
-        Spacer(Modifier.height(16.dp))
         Text("Login", fontSize = MaterialTheme.typography.displaySmall.fontSize)
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -93,25 +92,32 @@ fun Login(userViewModel: UserViewModel, navController: NavHostController){
             onValueChange = { email = it },
             label = { Text("Email") }
         )
-        Spacer(Modifier.height(16.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
             value = password,
             onValueChange = { password = it },
             label = { Text("password") }
         )
-        Spacer(Modifier.height(16.dp))
-        Button(onClick = {
-            userViewModel.loginUsers(email, password)
-        },
-            modifier = Modifier.background(color = Color.Black, shape = RoundedCornerShape(15))
-                .fillMaxWidth().padding(16.dp),
-            shape = RoundedCornerShape(15),
-            colors = ButtonColors(Color.Black, Color.White, Color.Transparent, Color.Transparent)
-        ) {
-            androidx.compose.material.Text(text = "Login", color = Color.White)
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            value = matNo,
+            onValueChange = { matNo = it },
+            label = { Text("password") }
+        )
+        Row (Modifier.fillMaxWidth().padding(4.dp).aspectRatio(3f)){
+            Button(onClick = {
+                userViewModel.getMatNo(matNo)
+                userViewModel.loginUsers(email, password)
+
+            },
+                modifier = Modifier.background(color = Color.Black, shape = RoundedCornerShape(15))
+                    .fillMaxWidth().padding(16.dp),
+                shape = RoundedCornerShape(15),
+                colors = ButtonColors(Color.Black, Color.White, Color.Transparent, Color.Transparent)
+            ) {
+                androidx.compose.material.Text(text = "Login", color = Color.White)
+            }
         }
-        Spacer(modifier = Modifier.height(16.dp))
         Text("forgotten password? reset password",
             Modifier.clickable {
                 //AlertDialog(onDismissRequest = {}, title = {}, text = { Text("reset password") }, confirmButton = {})

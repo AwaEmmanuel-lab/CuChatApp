@@ -29,13 +29,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.awatech.cuchatapp.ViewModels.MessageViewModel
 import com.awatech.cuchatapp.ViewModels.UserViewModel
 import com.awatech.cuchatapp.data.Message
 
 @Composable
-fun GroupChatScreenForLevel(navController: NavHostController, messageViewModel: MessageViewModel, userViewModel: UserViewModel){
+fun GroupChatScreenForLevel(navController: NavController, messageViewModel: MessageViewModel, userViewModel: UserViewModel){
 
     val messages by messageViewModel.getmessagelist2.observeAsState(emptyList())
     val currentUser by messageViewModel.curreUserState.observeAsState()
@@ -59,7 +60,7 @@ fun GroupChatScreenForLevel(navController: NavHostController, messageViewModel: 
             LazyColumn (modifier = Modifier.fillMaxWidth()
                 .weight(1f)
             ){
-                items(messageViewModel.getmessagelist2.value){
+                items(messages){
                         onemessage ->
                     var msg = onemessage.copy(isCurrentUser = messageViewModel.curreUserState.value?.matNo == onemessage.matNo)
                     MessageItem2(msg, messageViewModel)
@@ -92,19 +93,17 @@ fun MessageItem2(message: Message, messageViewModel: MessageViewModel){
             Alignment.Start
         }
     ) {
-        Box (modifier = Modifier.background(color = if(message.isCurrentUser){
-            Color.Black}else{
-            Color.DarkGray})){
-            Text(message.text, color = Color.White)
-            Text(messageViewModel.convertTimeStamp(message.timestamp), color = Color.White)
-            messageViewModel.curreUserState.value?.name?.let { Text("From $it") }
+        Text(message.text, color = Color.Black, modifier = Modifier.padding(2.dp))
+        Text(messageViewModel.convertTimeStamp(message.timestamp), color = Color.Black)
+        messageViewModel.curreUserState.value?.name?.let {
+            Text("From $it", modifier = Modifier.padding(2.dp))
         }
     }
 }
 
 
 @Composable
-fun TopAppBar2(navController: NavHostController){
+fun TopAppBar2(navController: NavController){
 
     androidx.compose.material.TopAppBar(
         title = {

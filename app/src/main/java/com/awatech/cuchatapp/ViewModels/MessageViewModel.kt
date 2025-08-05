@@ -37,25 +37,25 @@ class MessageViewModel: ViewModel() {
         }
     }
 
-    fun sendMessage(text: String, id: String){
+    fun sendMessage(text: String){
         viewModelScope.launch {
             var message = Message(
                 text = text,
-                username = curreUserState.value!!.name,
+                username = curreUserState.value?.name ?: "Student",
                 textId = "",
-                matNo = _currentUserState.value!!.matNo,
+                matNo = _currentUserState.value?.matNo ?: "invalid",
                 timestamp = Timestamp.now(),
                 isCurrentUser = true
             )
-            messages.sendMessage(message, id)
+            messages.sendMessage(message, _roomId.value)
         }
     }
 
 
 
-    fun getMessage(id: String){
+    fun getMessage(){
         viewModelScope.launch {
-            messages.getMessage(id).collect{
+            messages.getMessage(_roomId.value).collect{
                 msg -> _getMessage.value = msg
             }
         }
@@ -68,10 +68,10 @@ class MessageViewModel: ViewModel() {
         viewModelScope.launch {
             var message = Message(
                 text = text,
-                username = curreUserState.value!!.name,
+                username = curreUserState.value?.name ?: "Student",
                 textId = "",
                 timestamp = Timestamp.now(),
-                matNo = _currentUserState.value!!.matNo,
+                matNo = _currentUserState.value?.matNo ?: "Invalid",
                 isCurrentUser = false
             )
 
@@ -95,10 +95,10 @@ class MessageViewModel: ViewModel() {
         viewModelScope.launch {
             var message = Message(
                 text = text,
-                username = curreUserState.value!!.name,
+                username = curreUserState.value?.name ?: "Student",
                 textId = "",
                 timestamp = Timestamp.now(),
-                matNo = _currentUserState.value!!.matNo,
+                matNo = _currentUserState.value?.matNo ?: "Invalid",
                 isCurrentUser = false
             )
 

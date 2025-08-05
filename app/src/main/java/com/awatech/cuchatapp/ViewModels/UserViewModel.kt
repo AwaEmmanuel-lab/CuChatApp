@@ -20,6 +20,8 @@ import java.time.LocalDate
 
 class UserViewModel: ViewModel() {
 
+    private val  userAuthRepository = UserAuthRepository(Injection.getinstance(), FirebaseAuth.getInstance())
+
     private var _savedUserState = MutableLiveData<ResultState<Boolean>>()
     var savedUserState: LiveData<ResultState<Boolean>> = _savedUserState
 
@@ -55,6 +57,11 @@ class UserViewModel: ViewModel() {
         }
     }
 
+    fun getMatNo(matNo: String): String{
+        userAuthRepository.matNoForId = matNo
+        return userAuthRepository.matNoForId
+    }
+
     private var _getCurrentUser = MutableLiveData<User>()
     var getCurrentUser: LiveData<User> = _getCurrentUser
 
@@ -65,14 +72,12 @@ class UserViewModel: ViewModel() {
     }
 
 
-    private val  userAuthRepository = UserAuthRepository(Injection.getinstance(), FirebaseAuth.getInstance())
-
-    fun saveUser(user: User){
-        viewModelScope.launch {
-            _savedUserState.value = ResultState.Loading
-            _savedUserState.value = userAuthRepository.saveUser(user)
-        }
-    }
+//    fun saveUser(user: User){
+//        viewModelScope.launch {
+//            _savedUserState.value = ResultState.Loading
+//            _savedUserState.value = userAuthRepository.saveUser(user)
+//        }
+//    }
 
 
 

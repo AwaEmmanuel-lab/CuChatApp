@@ -29,13 +29,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.awatech.cuchatapp.ViewModels.MessageViewModel
 import com.awatech.cuchatapp.ViewModels.UserViewModel
 import com.awatech.cuchatapp.data.Message
 
 @Composable
-fun GroupChatScreenForAll(navController: NavHostController, messageViewModel: MessageViewModel, userViewModel: UserViewModel){
+fun GroupChatScreenForAll(navController: NavController, messageViewModel: MessageViewModel, userViewModel: UserViewModel){
 
     val messages by messageViewModel.getmessagelist3.observeAsState(emptyList())
     val currentUser by messageViewModel.curreUserState.observeAsState()
@@ -59,7 +60,7 @@ fun GroupChatScreenForAll(navController: NavHostController, messageViewModel: Me
             LazyColumn (modifier = Modifier.fillMaxWidth()
                 .weight(1f)
             ){
-                items(messageViewModel.getmessagelist3.value){
+                items(messages){
                         onemessage ->
                     var msg = onemessage.copy(isCurrentUser = messageViewModel.curreUserState.value?.matNo == onemessage.matNo)
                     MessageItem3(msg, messageViewModel)
@@ -92,19 +93,15 @@ fun MessageItem3(message: Message, messageViewModel: MessageViewModel){
             Alignment.Start
         }
     ) {
-        Box (modifier = Modifier.background(color = if(message.isCurrentUser){
-            Color.Black}else{
-            Color.DarkGray})){
-            Text(message.text, color = Color.White)
-            Text(messageViewModel.convertTimeStamp(message.timestamp), color = Color.White)
+            Text(message.text, color = Color.Black)
+            Text(messageViewModel.convertTimeStamp(message.timestamp), color = Color.Black)
             messageViewModel.curreUserState.value?.name?.let { Text("From $it") }
-        }
     }
 }
 
 
 @Composable
-fun TopAppBar3(navController: NavHostController){
+fun TopAppBar3(navController: NavController){
 
     androidx.compose.material.TopAppBar(
         title = {

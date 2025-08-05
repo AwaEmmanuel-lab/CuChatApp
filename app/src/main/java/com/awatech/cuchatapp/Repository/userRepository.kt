@@ -12,9 +12,9 @@ import kotlinx.coroutines.tasks.await
 
 class UserAuthRepository(val firestore: FirebaseFirestore, val auth: FirebaseAuth) {
 
-    suspend fun saveUser(user: User): ResultState<Boolean> =
+    suspend fun saveUser(user: User, uid: String): ResultState<Boolean> =
         try{
-            firestore.collection("Users").document(user.matNo).set(user).await()
+            firestore.collection("Users").document(uid).set(user).await()
             ResultState.Success(true)
         }catch(e: Exception){
             ResultState.Error(e)
@@ -22,11 +22,13 @@ class UserAuthRepository(val firestore: FirebaseFirestore, val auth: FirebaseAut
 
 
 
+
     suspend fun registerUser( name: String, email: String, password: String, matNo: String, course: String,yearOfGraduation: String, level: String): ResultState<Boolean> =
         try{
-            auth.createUserWithEmailAndPassword(email,password).await()
+            var result = auth.createUserWithEmailAndPassword(email,password).await()
             val user = User(name, email, password, matNo, course, yearOfGrad = yearOfGraduation, level = level)
-            saveUser(user)
+            val uid = result.user?.uid ?: throw IllegalStateException("User UID is null")
+            saveUser(user, uid)
             ResultState.Success(true)
         }catch (e: Exception){
             ResultState.Error(e)
@@ -42,7 +44,7 @@ class UserAuthRepository(val firestore: FirebaseFirestore, val auth: FirebaseAut
     }
 
     fun getAllUsers(): Flow<List<User>> = callbackFlow {
-        val subscription =  firestore.collection("Users").addSnapshotListener{ snapshot, e ->
+        val subscription =  firestore.collection("Users").addSnapshotListener{ snapshot, _ ->
             snapshot?.let{
                trySend(it.documents.mapNotNull { doc -> doc.toObject(User:: class.java)?.copy() }).isSuccess
             }
@@ -50,17 +52,16 @@ class UserAuthRepository(val firestore: FirebaseFirestore, val auth: FirebaseAut
         awaitClose { subscription.remove() }
     }
 
+    var matNoForId : String = ""
+
     suspend fun getCurrentUser(): User?{
 
-        var currentuserdetail: User? = null
-        var currentUser = auth.currentUser
+        val uid = auth.currentUser?.uid ?: throw IllegalStateException("User UID is null")
 
-        currentUser?.let {
-            val snapshot = firestore.collection("Users").document(currentUser.uid).get().await()
-            currentuserdetail =  snapshot.toObject(User::class.java)
-        }
+                val snapshot = firestore.collection("Users").document(uid).get().await()
+                val currentuserdetail =  snapshot.toObject(User::class.java)
+                return currentuserdetail
 
-        return currentuserdetail
     }
 
     suspend fun sendGrades(records: recordGrades):ResultState<Boolean> =
@@ -90,5 +91,4 @@ class UserAuthRepository(val firestore: FirebaseFirestore, val auth: FirebaseAut
         }catch (e: Exception){
             ResultState.Error(e)
         }
-
 }

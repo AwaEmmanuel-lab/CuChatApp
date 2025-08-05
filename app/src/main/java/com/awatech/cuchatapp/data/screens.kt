@@ -7,7 +7,7 @@ sealed class Screens(val route: String) {
         object SignUpScreen: DrawerScreen("signup")
         object LoginScreen: DrawerScreen("login")
         object CompleteProfileScreen: DrawerScreen("completeprofile")
-        object dashbord: DrawerScreen("Dashboard")
+        object dashboard: DrawerScreen("Dashboard")
         object chatScreen: DrawerScreen("chatScreenCourse")
         object chatScreenLevel: DrawerScreen("chatScreenLevel")
         object chatScreenAll: DrawerScreen("chatScreenAll")
