@@ -45,7 +45,7 @@ class MessageViewModel: ViewModel() {
                 textId = "",
                 matNo = _currentUserState.value?.matNo ?: "invalid",
                 timestamp = Timestamp.now(),
-                isCurrentUser = true
+                isCurrentUser = true,
             )
             messages.sendMessage(message, _roomId.value)
         }

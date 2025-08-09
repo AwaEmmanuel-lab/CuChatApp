@@ -153,7 +153,7 @@ fun DashBoardScreen2(navController: NavController, userViewModel: UserViewModel,
                 },
                 elevation = CardDefaults.cardElevation(8.dp, 0.dp)
             ){
-                Image(painter = painterResource(id = R.drawable.booksfrocanva), contentDescription = null)
+                Image(painter = painterResource(id = R.drawable.chatmessagelogo), contentDescription = null)
             }
             Card (modifier = Modifier.weight(0.45f)
                 .padding(4.dp)
@@ -168,7 +168,7 @@ fun DashBoardScreen2(navController: NavController, userViewModel: UserViewModel,
                 Image(painter = painterResource(id = R.drawable.phonefromcanva), contentDescription = null)
             }
         }
-        Spacer(modifier = Modifier.height(55.dp))
+        Spacer(modifier = Modifier.height(26.dp))
         Row (Modifier.fillMaxWidth().aspectRatio(2f)){
             Card (modifier = Modifier.weight(0.45f)
                 .padding(4.dp)

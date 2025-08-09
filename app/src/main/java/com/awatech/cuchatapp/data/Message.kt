@@ -8,5 +8,6 @@ data class Message(
     var username: String = "",
     var textId: String = "",
     var matNo: String = "",
+    var senderName: String = "",
     var isCurrentUser: Boolean = false
 )

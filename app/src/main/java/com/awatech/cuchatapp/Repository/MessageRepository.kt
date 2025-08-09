@@ -23,7 +23,7 @@ class MessageRepository(val firestore: FirebaseFirestore) {
 
     fun getMessage(id: String): Flow<List<Message>> = callbackFlow {
 
-        val subscription = firestore.collection("Messages"). document(id).collection("message")
+        val subscription = firestore.collection("Messages"). document(id).collection("message").orderBy("timestamp")
             .addSnapshotListener{ snapshot, e ->
                 snapshot?.let {
                     trySend(
@@ -44,7 +44,7 @@ class MessageRepository(val firestore: FirebaseFirestore) {
 
 
     fun getMessages2(id: String): Flow<List<Message>> = callbackFlow {
-        val subscription = firestore.collection("Messages2").document(id).collection("message")
+        val subscription = firestore.collection("Messages2").document(id).collection("message").orderBy("timestamp")
             .addSnapshotListener{snapshot, _ ->
                 snapshot?.let{
                     trySend(
@@ -67,7 +67,7 @@ class MessageRepository(val firestore: FirebaseFirestore) {
         }
 
     suspend fun getMessages3(id: String): Flow<List<Message>> = callbackFlow {
-        val subscription = firestore.collection("Messages3").document(id).collection("message")
+        val subscription = firestore.collection("Messages3").document(id).collection("message").orderBy("timestamp")
             .addSnapshotListener{snapshot, _ ->
                 snapshot?.let{
                     trySend(

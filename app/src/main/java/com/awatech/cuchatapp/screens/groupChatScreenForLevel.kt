@@ -5,11 +5,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -28,9 +30,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.awatech.cuchatapp.R
 import com.awatech.cuchatapp.ViewModels.MessageViewModel
 import com.awatech.cuchatapp.ViewModels.UserViewModel
 import com.awatech.cuchatapp.data.Message
@@ -93,10 +97,14 @@ fun MessageItem2(message: Message, messageViewModel: MessageViewModel){
             Alignment.Start
         }
     ) {
-        Text(message.text, color = Color.Black, modifier = Modifier.padding(2.dp))
-        Text(messageViewModel.convertTimeStamp(message.timestamp), color = Color.Black)
-        messageViewModel.curreUserState.value?.name?.let {
-            Text("From $it", modifier = Modifier.padding(2.dp))
+        Column(Modifier.fillMaxWidth(0.8f).padding(4.dp).background(color = if (message.isCurrentUser){
+            colorResource(id = R.color.coffeColor)
+        }else{ colorResource(id = R.color.DeepBlue)
+        }, shape = RoundedCornerShape(8)
+        )){
+            Text(message.text, color = Color.White, modifier =  Modifier.padding(8.dp))
+            Text(messageViewModel.convertTimeStamp(message.timestamp), color = Color.White,  modifier =  Modifier.padding(8.dp))
+            Text("from ${message.username}", color = Color.White)
         }
     }
 }
